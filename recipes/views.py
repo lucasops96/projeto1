@@ -8,8 +8,8 @@ def home(request):
         'name':'Miguel Santos'
     })
 
-def sobre(request):
-    return HttpResponse('Sobre do User')
-
 def contato(request):
+    return render(request,'recipes/contato.html')
+
+def sobre(request):
     return HttpResponse('Contato do User')
