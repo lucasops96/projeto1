@@ -35,6 +35,23 @@ class RecipeViewsTest(TestCase):
             email='username@email.com'
         ) 
 
+        recipe = Recipe.objects.create(
+            category = category,
+            author = author,
+            title =  'Recipe Title',
+            description = 'Recipe Description',
+            slug = 'recipe-slug',
+            preparation_time = 10,
+            preparation_time_unit = 'Minutes', 
+            servings = 4,
+            servings_unit = 'Porções',
+            preparation_steps = 'Recipe Preparation Steps',
+            preparation_steps_is_hmtl = False,
+            is_published = True,
+        )
+
+        assert 1 == 1
+
     def test_recipe_category_view_function_is_correct(self):
         view = resolve(
             reverse('recipes:category', kwargs={'category_id': 1000})
@@ -58,3 +75,12 @@ class RecipeViewsTest(TestCase):
              reverse('recipes:recipe', kwargs={'id': 1000})
         )
         self.assertEqual(response.status_code, 404)
+    
+
+    def test_recipe_search_uses_correct_view_function(self):
+        resolved = resolve(reverse('recipes:search'))
+        self.assertIs(resolved.func, views.search)
+    
+    def test_recipe_search_loads_correct_template(self):
+        response = self.client.get(reverse('recipes:search'))
+        self.assertTemplateUsed(response, 'recipes/pages/search.html')
