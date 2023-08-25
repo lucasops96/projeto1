@@ -44,7 +44,7 @@ class RecipeSearchViewTest(RecipeTestBase):
         response1 = self.client.get(f'{search_url}?q={title1}')
         response2 = self.client.get(f'{search_url}?q={title2}')
         response_both = self.client.get(f'{search_url}?q=this')
-        
+
         self.assertIn(recipe1, response1.context['recipes'])
         self.assertNotIn(recipe2, response1.context['recipes'])
 
@@ -53,5 +53,7 @@ class RecipeSearchViewTest(RecipeTestBase):
 
         self.assertIn(recipe1, response_both.context['recipes'])
         self.assertIn(recipe2, response_both.context['recipes'])
+        
+        
 
 
