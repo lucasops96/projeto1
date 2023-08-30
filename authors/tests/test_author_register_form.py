@@ -1,8 +1,10 @@
-from authors.forms import RegisterForm
+from unittest import TestCase
+
 from django.test import TestCase as DjangoTestCase
 from django.urls import reverse
 from parameterized import parameterized
-from unittest import TestCase
+
+from authors.forms import RegisterForm
 
 
 class AuthorRegisterFormUnitTest(TestCase):
@@ -64,7 +66,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
 
     @parameterized.expand([
         ('username', 'This field must not be empty'),
-         ('first_name', 'Write your first name'),
+        ('first_name', 'Write your first name'),
         ('last_name', 'Write your last name'),
         ('password', 'Password must not be empty'),
         ('password2', 'Please, repeat your password'),
