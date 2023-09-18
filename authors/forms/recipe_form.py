@@ -16,6 +16,7 @@ class AuthorRecipeForm(forms.ModelForm):
         fields = [
             'title',
             'description',
+            'category',
             'preparation_time',
             'preparation_time_unit',
             'servings',

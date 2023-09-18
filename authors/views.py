@@ -110,9 +110,54 @@ def dashboard_recipe_edit(request,id):
     
     form = AuthorRecipeForm(
         request.POST or None,
+        files=request.FILES or None,
         instance=recipe
     )
+
+    if form.is_valid():
+        # Agora, o form é válido e eu posso tentar salvar
+        recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.preparation_steps_is_hmtl = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request,'Sua receita foi salva com sucesso!')
+        return redirect(reverse('authors:dashboard_recipe_edit',args=(id,)))
+        
     
     return render(request,'authors/pages/dashboard_recipe.html',context={
         'form':form
+    })
+
+
+@login_required(login_url='authors:login',redirect_field_name='next')
+def dashboard_recipe_new(request):
+    form = AuthorRecipeForm(
+        request.POST or None,
+        files=request.FILES or None,
+    )
+
+    if form.is_valid():
+        recipe: Recipe = form.save(commit=False)
+
+        recipe.author = request.user
+        recipe.slug = recipe.title.lower().replace(' ','-')
+        recipe.preparation_steps_is_hmtl = False
+        recipe.is_published = False
+
+        recipe.save()
+
+        messages.success(request,'Salvo com sucesso!')
+        return redirect(
+            reverse('authors:dashboard_recipe_edit',args=(recipe.id,))
+        )
+
+
+
+    return render(request,'authors/pages/dashboard_recipe.html',context={
+        'form':form,
+        'form_action':reverse('authors:dashboard_recipe_new')
     })
