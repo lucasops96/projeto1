@@ -144,7 +144,8 @@ def dashboard_recipe_new(request):
         recipe: Recipe = form.save(commit=False)
 
         recipe.author = request.user
-        recipe.slug = recipe.title.lower().replace(' ','-')
+        #Fiz está linha para atribuir o slug da receita criada antes do instrutor ensinar de como usar slugfy no model de Recipe.
+        #recipe.slug = recipe.title.lower().replace(' ','-')
         recipe.preparation_steps_is_hmtl = False
         recipe.is_published = False
 
