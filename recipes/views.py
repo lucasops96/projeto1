@@ -1,12 +1,13 @@
 import os
 from typing import Any
+from django import http
 
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-
+from django.http import JsonResponse
 from recipes.models import Recipe
 from utils.pagination import make_pagination
 
@@ -42,7 +43,15 @@ class RecipeListViewBase(ListView):
 
 
 class RecipeListViewHome(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html' 
+
+class RecipeListViewHomeApi(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        return JsonResponse(
+            {'qualquercoisa':1},
+        )
 
 class RecipeListViewCategory(RecipeListViewBase):
     template_name = 'recipes/pages/category.html'
@@ -132,13 +141,13 @@ class RecipeDetail(DetailView):
 #     })
 
 
-def recipe(request, id):
-    recipe = get_object_or_404(Recipe,pk=id, is_published=True) 
+# def recipe(request, id):
+#     recipe = get_object_or_404(Recipe,pk=id, is_published=True) 
 
-    return render(request,'recipes/pages/recipe-view.html', context={
-        'recipe': recipe,
-        'is_detail_page': True,
-    })
+#     return render(request,'recipes/pages/recipe-view.html', context={
+#         'recipe': recipe,
+#         'is_detail_page': True,
+#     })
 
 # def search(request):
 #     search_term = request.GET.get('q','').strip()

@@ -1,4 +1,4 @@
-#Projeto Recipes em Django
+# Projeto Recipes em Django
 
 ## Descrição
 Um autor(usuário) cadastrado pode postar suas receitas na plataforma.
