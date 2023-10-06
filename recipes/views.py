@@ -1,13 +1,14 @@
 import os
 from typing import Any
-from django import http
 
+from django import http
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404
+from django.forms.models import model_to_dict
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-from django.http import JsonResponse
+
 from recipes.models import Recipe
 from utils.pagination import make_pagination
 
@@ -49,8 +50,12 @@ class RecipeListViewHomeApi(RecipeListViewBase):
     template_name = 'recipes/pages/home.html'
 
     def render_to_response(self, context, **response_kwargs):
+        recipes = self.get_context_data()['recipes']
+        recipes_list = recipes.object_list.values()
+
         return JsonResponse(
-            {'qualquercoisa':1},
+            list(recipes_list),
+            safe=False,
         )
 
 class RecipeListViewCategory(RecipeListViewBase):
@@ -117,7 +122,26 @@ class RecipeDetail(DetailView):
             'is_detail_page':True
         })
         return ctx
-    
+
+class RecipeDetailApi(RecipeDetail):
+    def render_to_response(self, context, **response_kwargs):
+        recipe = self.get_context_data()['recipe']
+        recipe_dict = model_to_dict(recipe)
+
+        recipe_dict['created_at'] = str(recipe.created_at)
+        recipe_dict['updated_at'] = str(recipe.updated_at)
+
+        if recipe_dict.get('cover'):
+            recipe_dict['cover'] = self.request.build_absolute_uri() + recipe_dict['cover'].url[1:]
+        else:
+            recipe_dict['cover'] = ''
+        
+        del recipe_dict['is_published']
+
+        return JsonResponse(
+            recipe_dict,
+            safe=False,
+        )
 
 # def home(request):
 #     recipes = Recipe.objects.filter(is_published=True).order_by('-id')
