@@ -14,6 +14,14 @@ from utils.pagination import make_pagination
 
 PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
+def theory(request,*args, **kwargs):
+    recipes = Recipe.objects.all()
+    recipes = recipes.filter(title__icontains='Macarrão')
+    context = {
+        'recipes':recipes
+    }
+    return render(request,'recipes/pages/theory.html',context=context)
+
 class RecipeListViewBase(ListView):
     template_name = 'recipes/pages/home.html'
     model = Recipe
