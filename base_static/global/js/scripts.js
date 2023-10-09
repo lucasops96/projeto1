@@ -1,7 +1,7 @@
-function my_scope(){
+
+(()=>{
     const forms = document.querySelectorAll('.form-delete')
 
-    console.log(forms)
     for(const form of forms){
         form.addEventListener('submit',function(e){
             e.preventDefault();
@@ -13,6 +13,14 @@ function my_scope(){
             }
         })
     }
-}
+})()
 
-my_scope();
+
+(()=>{
+    const buttonCloseMenu = document.querySelector('.button-close-menu')
+    const buttonShowMenu = document.querySelector('.button-show-menu')
+    const menuContainer = document.querySelector('.menu-container')
+})()
+    
+
+
