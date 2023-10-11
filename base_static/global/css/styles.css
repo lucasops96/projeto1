@@ -489,6 +489,7 @@ color: var(--color-debug-dark);
     margin: var(--spacing-gutter-medium) 0;
 }
 
+/* Menu */
 .hidden-text{
     display: none;
 }
@@ -524,8 +525,10 @@ color: var(--color-debug-dark);
     font-size: 2rem;
     z-index: 3;
     padding: 1rem;
+
     visibility: hidden;
     opacity: 0;
+
     transition: all 300ms ease-in-out;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
@@ -534,6 +537,7 @@ color: var(--color-debug-dark);
 .button-show-menu-visible{
     visibility: visible;
     opacity: 1;
+    
     left: 5px;
 }
 
