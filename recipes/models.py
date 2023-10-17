@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
@@ -34,6 +37,9 @@ class Recipe(models.Model):
     
     def get_absolute_url(self):
         return reverse('recipes:recipe', args=(self.id,))
+    
+    # def resize_image(image,new_width=800):
+    #     image_full_path = os.path.join(settings.MEDIA_ROOT)
     
     def save(self, *args, **kwargs):
         if not self.slug:
