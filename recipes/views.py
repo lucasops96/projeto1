@@ -3,12 +3,13 @@ from typing import Any
 
 from django import http
 from django.core.paginator import Paginator
-from django.db.models import Q,F
+from django.db.models import F, Q, Value
+from django.db.models.aggregates import Count
+from django.db.models.functions import Concat
 from django.forms.models import model_to_dict
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
-from django.db.models import Q
 
 from recipes.models import Recipe
 from utils.pagination import make_pagination
@@ -16,10 +17,21 @@ from utils.pagination import make_pagination
 PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
 def theory(request,*args, **kwargs):
-    recipes = Recipe.objects.values('id','title','author__username')[:10]
+    # recipes = Recipe.objects.values('id','title').filter(title__icontains='pudim')
+    recipes = Recipe.objects.all().annotate(
+        author_full_name=Concat(
+            F('author__first_name'),
+            Value(' '),
+            F('author__last_name'),
+            Value(' ('),F('author__username'),Value(')')
+        )
+    )
+
+    number_of_recipes = recipes.aggregate(total=Count('id'))
 
     context = {
-        'recipes':recipes
+        'recipes':recipes,
+        'number_of_recipes':number_of_recipes['total']
     }
     return render(request,'recipes/pages/theory.html',context=context)
 
