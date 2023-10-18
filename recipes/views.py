@@ -3,11 +3,12 @@ from typing import Any
 
 from django import http
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q,F
 from django.forms.models import model_to_dict
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, ListView
+from django.db.models import Q
 
 from recipes.models import Recipe
 from utils.pagination import make_pagination
@@ -15,8 +16,8 @@ from utils.pagination import make_pagination
 PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
 def theory(request,*args, **kwargs):
-    recipes = Recipe.objects.all()
-    recipes = recipes.filter(title__icontains='Macarrão')
+    recipes = Recipe.objects.values('id','title','author__username')[:10]
+
     context = {
         'recipes':recipes
     }
