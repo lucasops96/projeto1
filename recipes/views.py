@@ -18,15 +18,7 @@ PER_PAGE = int(os.environ.get('PER_PAGE',6))
 
 def theory(request,*args, **kwargs):
     # recipes = Recipe.objects.values('id','title').filter(title__icontains='pudim')
-    recipes = Recipe.objects.all().annotate(
-        author_full_name=Concat(
-            F('author__first_name'),
-            Value(' '),
-            F('author__last_name'),
-            Value(' ('),F('author__username'),Value(')')
-        )
-    )
-
+    recipes = Recipe.objects.get_published()
     number_of_recipes = recipes.aggregate(total=Count('id'))
 
     context = {
